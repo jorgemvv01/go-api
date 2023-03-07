@@ -1,7 +1,6 @@
 package storage
 
 import (
-	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"os"
@@ -10,11 +9,6 @@ import (
 var db *gorm.DB
 
 func GetInstance() *gorm.DB {
-	err := godotenv.Load(".env")
-
-	if err != nil {
-		panic("Error loading .env file")
-	}
 	if db == nil {
 		var err error
 		dsn := os.Getenv("DATABASE_URL")
