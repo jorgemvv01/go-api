@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"os"
@@ -9,9 +10,14 @@ import (
 var db *gorm.DB
 
 func GetInstance() *gorm.DB {
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		panic("Error loading .env file")
+	}
 	if db == nil {
 		var err error
-		dsn := `host=` + os.Getenv("PGHOST") + ` user=` + os.Getenv("PGUSER") + ` password=` + os.Getenv("PGPASSWORD") + `dbname=` + os.Getenv("PGDATABASE") + ` port=` + os.Getenv("PGPORT") + ` sslmode=disable`
+		dsn := os.Getenv("DATABASE_URL")
 		db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 		if err != nil {
 			panic("failed to connect database")

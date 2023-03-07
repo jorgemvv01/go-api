@@ -8,7 +8,6 @@ import (
 )
 
 func main() {
-	log.Println("hola mundo")
 	db := storage.GetInstance()
 	db.AutoMigrate(
 		&models.User{},
