@@ -1,12 +1,19 @@
 package main
 
 import (
+	_ "github/jorgemvv01/go-api/docs"
 	"github/jorgemvv01/go-api/models"
 	"github/jorgemvv01/go-api/routes"
 	"github/jorgemvv01/go-api/storage"
 	"log"
 )
 
+// @title VideoClub GO-API
+// @version 1.0
+// @description A simple API to manage movie rentals
+
+// @host localhost:8080
+// @BasePath /api
 func main() {
 	db := storage.GetInstance()
 	db.AutoMigrate(
