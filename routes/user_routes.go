@@ -7,7 +7,7 @@ import (
 	"github/jorgemvv01/go-api/storage"
 )
 
-func RegisterUserRouter(router *gin.Engine) {
+func RegisterUserRouter(router *gin.RouterGroup) {
 	db := storage.GetInstance()
 	userRepository := repositories.NewUserRepository(db)
 	userController := controllers.NewUserController(userRepository)
