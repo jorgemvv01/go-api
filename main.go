@@ -12,9 +12,9 @@ import (
 // @version 1.0
 // @description A simple API to manage movie rentals
 
-// @host localhost:8080
 // @BasePath /api
 func main() {
+
 	db := storage.GetInstance()
 	db.AutoMigrate(
 		&models.User{},
