@@ -2,10 +2,10 @@ basePath: /api
 definitions:
   models.Response:
     properties:
-      data: {}
-      message:
+      Data: {}
+      Message:
         type: string
-      status:
+      Status:
         type: string
     type: object
   models.UserRequest:
@@ -17,10 +17,58 @@ definitions:
     type: object
 info:
   contact: {}
-  description: A simple API to manage movie rentals
-  title: VideoClub GO-API
+  description: 'A simple API to manage movie rentals, \n GitHub Repository: https://github.com/jorgemvv01/go-api'
+  title: VideoClub Go - REST API
   version: "1.0"
 paths:
+  /type/:
+    get:
+      description: Get all Types
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Get all Types
+      tags:
+      - Type Movie
+  /type/{ID}:
+    get:
+      description: Get Type by ID
+      parameters:
+      - description: Get Type by ID
+        in: path
+        name: ID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Get Type by ID
+      tags:
+      - Type Movie
   /users:
     get:
       description: Get all Users.
@@ -30,15 +78,15 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/models.Response'
-            type: array
+            $ref: '#/definitions/models.Response'
         "400":
           description: Bad Request
           schema:
-            items:
-              $ref: '#/definitions/models.Response'
-            type: array
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
       summary: Get all Users
       tags:
       - Users
@@ -60,6 +108,10 @@ paths:
             $ref: '#/definitions/models.Response'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Response'
       summary: Get User by ID
@@ -86,7 +138,71 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
       summary: Create User
+      tags:
+      - Users
+  /users/delete/{ID}:
+    delete:
+      description: Delete User by ID.
+      parameters:
+      - description: Delete user by ID
+        in: path
+        name: ID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Delete User
+      tags:
+      - Users
+  /users/update/{ID}:
+    patch:
+      description: Update User by ID.
+      parameters:
+      - description: Update user by ID
+        in: path
+        name: ID
+        required: true
+        type: string
+      - description: Create user
+        in: body
+        name: tags
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Update User
       tags:
       - Users
 swagger: "2.0"

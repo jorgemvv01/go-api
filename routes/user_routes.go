@@ -16,4 +16,6 @@ func RegisterUserRouter(router *gin.RouterGroup) {
 	userRouter.GET("", userController.GetAll)
 	userRouter.GET("/:id", userController.GetByID)
 	userRouter.POST("/create", userController.Create)
+	userRouter.PATCH("/update/:id", userController.Update)
+	userRouter.DELETE("/delete/:id", userController.Delete)
 }

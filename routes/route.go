@@ -12,6 +12,7 @@ func SetupRoutes() *gin.Engine {
 	{
 		api.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 		RegisterUserRouter(api)
+		RegisterTypeRoutes(api)
 	}
 
 	return router
