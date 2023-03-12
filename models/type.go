@@ -1,6 +1,12 @@
 package models
 
+import "gorm.io/gorm"
+
 type Type struct {
-	ID   uint   `gorm:"primaryKey"`
+	gorm.Model
 	Name string `gorm:"not null"`
+}
+
+type TypeRequest struct {
+	Name string `json:"name"`
 }

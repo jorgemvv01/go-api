@@ -8,9 +8,9 @@ import (
 	"log"
 )
 
-// @title VideoClub GO-API
+// @title VideoClub Go - REST API
 // @version 1.0
-// @description A simple API to manage movie rentals
+// @description A simple API to manage movie rentals \n GitHub Repository: https://github.com/jorgemvv01/go-api
 
 // @BasePath /api
 func main() {
