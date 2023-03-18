@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-type UserController interface {
+type GenreController interface {
 	Create(c *gin.Context)
 	GetByID(c *gin.Context)
 	GetAll(c *gin.Context)
@@ -19,208 +19,208 @@ type UserController interface {
 	Delete(c *gin.Context)
 }
 
-type userController struct {
-	userRepository repositories.UserRepository
+type genreController struct {
+	repository repositories.GenreRepository
 }
 
-func NewUserController(repository repositories.UserRepository) UserController {
-	return &userController{
-		userRepository: repository,
+func NewGenreController(genreRepository repositories.GenreRepository) GenreController {
+	return &genreController{
+		repository: genreRepository,
 	}
 }
 
-// CreateUser
-// @Summary Create User
-// @Description Create a new user.
-// @Param tags body models.UserRequest true "Create user"
+// CreateGenre
+// @Summary Create Genre
+// @Description Create a new genre.
+// @Param tags body models.GenreRequest true "Create genre"
 // @Produce application/json
-// @Tags Users
+// @Tags Movie Genre
 // @Success 200 {object} models.Response{}
 // @Failure 400 {object} models.Response{}
 // @Failure 500 {object} models.Response{}
-// @Router /users/create [post]
-func (uc *userController) Create(c *gin.Context) {
-	var user *models.User
-	if err := c.ShouldBindJSON(&user); err != nil {
+// @Router /genres/create [post]
+func (gc *genreController) Create(c *gin.Context) {
+	var genre *models.Genre
+	if err := c.ShouldBindJSON(&genre); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
 			Status:  "Error",
 			Message: `Invalid request body... ` + err.Error(),
 		})
 		return
 	}
-	if err := uc.userRepository.Create(user); err != nil {
+	if err := gc.repository.Create(genre); err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, models.Response{
 			Status:  "Error",
-			Message: `Unable to create user... ` + err.Error(),
+			Message: `Unable to create genre... ` + err.Error(),
 		})
 		return
 	}
 	c.JSON(http.StatusOK, models.Response{
 		Status:  "Success",
-		Message: "User created successfully",
-		Data:    user,
+		Message: "Genre created successfully",
+		Data:    genre,
 	})
 }
 
-// GetUserByID
-// @Summary Get User by ID
-// @Description Get a user by ID.
-// @Param ID path string true "Get user by ID"
+// GetGenreByID
+// @Summary Get Genre by ID
+// @Description Get a genre by ID.
+// @Param ID path string true "Get genre by ID"
 // @Produce application/json
-// @Tags Users
+// @Tags Movie Genre
 // @Success 200 {object} models.Response{}
 // @Failure 400 {object} models.Response{}
 // @Failure 404 {object} models.Response{}
 // @Failure 500 {object} models.Response{}
-// @Router /users/{ID} [get]
-func (ur *userController) GetByID(c *gin.Context) {
+// @Router /genres/{ID} [get]
+func (gc *genreController) GetByID(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
 			Status:  "Error",
-			Message: "Invalid user ID",
+			Message: "Invalid genre ID",
 		})
 		return
 	}
-	user, err := ur.userRepository.GetByID(uint(id))
+	genre, err := gc.repository.GetByID(uint(id))
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, models.Response{
 			Status:  "Error",
-			Message: `Unable to get user... ` + err.Error(),
+			Message: `Unable to get genre... ` + err.Error(),
 		})
 		return
 	}
-	if user.ID == 0 {
+	if genre.ID == 0 {
 		c.AbortWithStatusJSON(http.StatusNotFound, models.Response{
 			Status:  "Error",
-			Message: fmt.Sprintf("User with ID %d not found", uint(id)),
+			Message: fmt.Sprintf("Genre with ID %d not found", uint(id)),
 		})
 		return
 	}
 	c.JSON(http.StatusOK, models.Response{
 		Status:  "Success",
-		Message: "User found",
-		Data:    user,
+		Message: "Genre found",
+		Data:    genre,
 	})
 }
 
-// GetAllUser
-// @Summary Get all Users
-// @Description Get all Users.
+// GetAllGenres
+// @Summary Get all Genres
+// @Description Get all Genres.
 // @Produce application/json
-// @Tags Users
+// @Tags Movie Genre
 // @Success 200 {object} models.Response{}
 // @Failure 500 {object} models.Response{}
-// @Router /users [get]
-func (ur *userController) GetAll(c *gin.Context) {
-	users, err := ur.userRepository.GetAll()
+// @Router /genres [get]
+func (gc *genreController) GetAll(c *gin.Context) {
+	genres, err := gc.repository.GetAll()
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, models.Response{
 			Status:  "Error",
-			Message: `Unable to get users... ` + err.Error(),
+			Message: `Unable to get genres... ` + err.Error(),
 		})
 		return
 	}
-	if len(*users) == 0 {
+	if len(*genres) == 0 {
 		c.JSON(http.StatusOK, models.Response{
 			Status:  "Success",
-			Message: "No users found",
+			Message: "No genres found",
 		})
 		return
 	}
 	c.JSON(http.StatusOK, models.Response{
 		Status:  "Success",
-		Message: "Users found",
-		Data:    users,
+		Message: "Genres found",
+		Data:    genres,
 	})
 }
 
-// UpdateUser
-// @Summary Update User
-// @Description Update User by ID.
+// UpdateGenre
+// @Summary Update Genre
+// @Description Update Genre by ID.
 // @Produce application/json
-// @Param ID path string true "Update user by ID"
-// @Param tags body models.UserRequest true "Create user"
-// @Tags Users
+// @Param ID path string true "Update genre by ID"
+// @Param tags body models.GenreRequest true "Create genre"
+// @Tags Movie Genre
 // @Success 200 {object} models.Response{}
 // @Failure 400 {object} models.Response{}
 // @Failure 404 {object} models.Response{}
 // @Failure 500 {object} models.Response{}
-// @Router /users/update/{ID} [patch]
-func (uc *userController) Update(c *gin.Context) {
+// @Router /genres/update/{ID} [patch]
+func (gc *genreController) Update(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
 			Status:  "Error",
-			Message: "Invalid user ID",
+			Message: "Invalid genre ID",
 		})
 		return
 	}
-	var user *models.User
-	if err = c.ShouldBindJSON(&user); err != nil {
+	var genre *models.Genre
+	if err = c.ShouldBindJSON(&genre); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
 			Status:  "Error",
 			Message: `Invalid request body... ` + err.Error(),
 		})
 		return
 	}
-	if user, err = uc.userRepository.Update(uint(id), user); err != nil {
+	if genre, err = gc.repository.Update(uint(id), genre); err != nil {
 		if errors.Is(err, utils.ErrNotFound) {
 			c.AbortWithStatusJSON(http.StatusNotFound, models.Response{
 				Status:  "Error",
-				Message: fmt.Sprintf("User with ID %d not found", uint(id)),
+				Message: fmt.Sprintf("Genre with ID %d not found", uint(id)),
 			})
 		} else {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, models.Response{
 				Status:  "Error",
-				Message: `Unable to update user... ` + err.Error(),
+				Message: `Unable to update genre... ` + err.Error(),
 			})
 		}
 		return
 	}
 	c.JSON(http.StatusOK, models.Response{
 		Status:  "Success",
-		Message: "User updated successfully",
-		Data:    user,
+		Message: "Genre updated successfully",
+		Data:    genre,
 	})
 }
 
-// DeleteUser
-// @Summary Delete User
-// @Description Delete User by ID.
+// DeleteGenre
+// @Summary Delete Genre
+// @Description Delete Genre by ID.
 // @Produce application/json
-// @Param ID path string true "Delete user by ID"
-// @Tags Users
+// @Param ID path string true "Delete genre by ID"
+// @Tags Movie Genre
 // @Success 200 {object} models.Response{}
 // @Failure 400 {object} models.Response{}
 // @Failure 404 {object} models.Response{}
 // @Failure 500 {object} models.Response{}
-// @Router /users/delete/{ID} [delete]
-func (uc *userController) Delete(c *gin.Context) {
+// @Router /genres/delete/{ID} [delete]
+func (gc *genreController) Delete(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, models.Response{
 			Status:  "Error",
-			Message: "Invalid user ID",
+			Message: "Invalid genre ID",
 		})
 		return
 	}
-	if err = uc.userRepository.Delete(uint(id)); err != nil {
+	if err = gc.repository.Delete(uint(id)); err != nil {
 		if errors.Is(err, utils.ErrNotFound) {
 			c.AbortWithStatusJSON(http.StatusNotFound, models.Response{
 				Status:  "Error",
-				Message: fmt.Sprintf("User with ID %d not found", uint(id)),
+				Message: fmt.Sprintf("Genre with ID %d not found", uint(id)),
 			})
 		} else {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, models.Response{
 				Status:  "Error",
-				Message: `Unable to delete user...` + err.Error(),
+				Message: `Unable to delete genre...` + err.Error(),
 			})
 		}
 		return
 	}
 	c.JSON(http.StatusOK, models.Response{
 		Status:  "Success",
-		Message: "User deleted successfully",
+		Message: "Genre deleted successfully",
 	})
 }

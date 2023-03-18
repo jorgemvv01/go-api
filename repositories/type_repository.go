@@ -1,16 +1,16 @@
 package repositories
 
 import (
-	"fmt"
 	"github/jorgemvv01/go-api/models"
+	"github/jorgemvv01/go-api/utils"
 	"gorm.io/gorm"
 )
 
 type TypeRepository interface {
-	Create(typeMovie *models.Type) error
+	Create(movieType *models.Type) error
 	GetByID(id uint) (*models.Type, error)
 	GetAll() (*[]models.Type, error)
-	Update(id uint, typeMovie *models.Type) (*models.Type, error)
+	Update(id uint, movieType *models.Type) (*models.Type, error)
 	Delete(id uint) error
 }
 
@@ -24,19 +24,16 @@ func NewTypeRepository(db *gorm.DB) TypeRepository {
 	}
 }
 
-func (tr *typeRepository) Create(typeMovie *models.Type) error {
-	return tr.db.Create(&typeMovie).Error
+func (tr *typeRepository) Create(movieType *models.Type) error {
+	return tr.db.Create(&movieType).Error
 }
 
 func (tr *typeRepository) GetByID(id uint) (*models.Type, error) {
-	var typeMovie *models.Type
-	if err := tr.db.Find(&typeMovie, id).Error; err != nil {
-		return typeMovie, err
+	var movieType *models.Type
+	if err := tr.db.Find(&movieType, id).Error; err != nil {
+		return nil, err
 	}
-	if typeMovie.ID == 0 {
-		return typeMovie, fmt.Errorf("type with ID %d not found", id)
-	}
-	return typeMovie, nil
+	return movieType, nil
 }
 
 func (tr *typeRepository) GetAll() (*[]models.Type, error) {
@@ -47,28 +44,28 @@ func (tr *typeRepository) GetAll() (*[]models.Type, error) {
 	return typesMovie, nil
 }
 
-func (tr *typeRepository) Update(id uint, typeMovie *models.Type) (*models.Type, error) {
-	var oldTypeMovie *models.Type
-	if err := tr.db.Find(&oldTypeMovie, id).Error; err != nil {
-		return typeMovie, err
+func (tr *typeRepository) Update(id uint, movieType *models.Type) (*models.Type, error) {
+	var oldMovieType *models.Type
+	if err := tr.db.Find(&oldMovieType, id).Error; err != nil {
+		return nil, err
 	}
-	if oldTypeMovie.ID == 0 {
-		return typeMovie, fmt.Errorf("type with ID %d not found", id)
+	if movieType.ID == 0 {
+		return nil, utils.ErrNotFound
 	}
-	oldTypeMovie.Name = typeMovie.Name
-	if err := tr.db.Save(&oldTypeMovie).Error; err != nil {
-		return oldTypeMovie, err
+	oldMovieType.Name = movieType.Name
+	if err := tr.db.Save(&oldMovieType).Error; err != nil {
+		return nil, err
 	}
-	return oldTypeMovie, nil
+	return oldMovieType, nil
 }
 
 func (tr *typeRepository) Delete(id uint) error {
-	var typeMovie *models.Type
-	if err := tr.db.Find(&typeMovie, id).Error; err != nil {
+	var movieType *models.Type
+	if err := tr.db.Find(&movieType, id).Error; err != nil {
 		return err
 	}
-	if typeMovie.ID == 0 {
-		return fmt.Errorf("user with ID %d not found", id)
+	if movieType.ID == 0 {
+		return utils.ErrNotFound
 	}
-	return tr.db.Delete(&typeMovie).Error
+	return tr.db.Delete(&movieType).Error
 }

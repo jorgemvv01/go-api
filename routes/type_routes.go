@@ -12,7 +12,7 @@ func RegisterTypeRoutes(router *gin.RouterGroup) {
 	typeRepository := repositories.NewTypeRepository(db)
 	typeController := controllers.NewTypeController(typeRepository)
 
-	typeRouter := router.Group("/type")
+	typeRouter := router.Group("/types")
 	typeRouter.GET("/", typeController.GetAll)
 	typeRouter.GET("/:id", typeController.GetByID)
 	//typeRouter.POST("/create", typeController.Create)
