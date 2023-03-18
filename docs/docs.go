@@ -15,14 +15,233 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/type/": {
+        "/genres": {
+            "get": {
+                "description": "Get all Genres.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Movie Genre"
+                ],
+                "summary": "Get all Genres",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/genres/create": {
+            "post": {
+                "description": "Create a new genre.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Movie Genre"
+                ],
+                "summary": "Create Genre",
+                "parameters": [
+                    {
+                        "description": "Create genre",
+                        "name": "tags",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.GenreRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/genres/delete/{ID}": {
+            "delete": {
+                "description": "Delete Genre by ID.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Movie Genre"
+                ],
+                "summary": "Delete Genre",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Delete genre by ID",
+                        "name": "ID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/genres/update/{ID}": {
+            "patch": {
+                "description": "Update Genre by ID.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Movie Genre"
+                ],
+                "summary": "Update Genre",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Update genre by ID",
+                        "name": "ID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Create genre",
+                        "name": "tags",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.GenreRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/genres/{ID}": {
+            "get": {
+                "description": "Get a genre by ID.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Movie Genre"
+                ],
+                "summary": "Get Genre by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Get genre by ID",
+                        "name": "ID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/types/": {
             "get": {
                 "description": "Get all Types",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Type Movie"
+                    "Movie Type"
                 ],
                 "summary": "Get all Types",
                 "responses": {
@@ -47,14 +266,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/type/{ID}": {
+        "/types/{ID}": {
             "get": {
                 "description": "Get Type by ID",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Type Movie"
+                    "Movie Type"
                 ],
                 "summary": "Get Type by ID",
                 "parameters": [
@@ -75,6 +294,12 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/models.Response"
                         }
@@ -101,12 +326,6 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Response"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/models.Response"
                         }
@@ -195,6 +414,12 @@ const docTemplate = `{
                             "$ref": "#/definitions/models.Response"
                         }
                     },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -245,6 +470,12 @@ const docTemplate = `{
                             "$ref": "#/definitions/models.Response"
                         }
                     },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -286,6 +517,12 @@ const docTemplate = `{
                             "$ref": "#/definitions/models.Response"
                         }
                     },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -297,6 +534,14 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "models.GenreRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Response": {
             "type": "object",
             "properties": {
@@ -330,7 +575,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/api",
 	Schemes:          []string{},
 	Title:            "VideoClub Go - REST API",
-	Description:      "A simple API to manage movie rentals, \\n GitHub Repository: https://github.com/jorgemvv01/go-api",
+	Description:      "A simple API to manage movie rentals \\n GitHub Repository: https://github.com/jorgemvv01/go-api",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

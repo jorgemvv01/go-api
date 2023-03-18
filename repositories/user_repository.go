@@ -1,8 +1,8 @@
 package repositories
 
 import (
-	"fmt"
 	"github/jorgemvv01/go-api/models"
+	"github/jorgemvv01/go-api/utils"
 	"gorm.io/gorm"
 )
 
@@ -33,9 +33,6 @@ func (ur *userRepository) GetByID(id uint) (*models.User, error) {
 	if err := ur.db.Find(&user, id).Error; err != nil {
 		return nil, err
 	}
-	if user.ID == 0 {
-		return nil, fmt.Errorf("user with ID %d not found", id)
-	}
 	return user, nil
 }
 
@@ -53,7 +50,7 @@ func (ur *userRepository) Update(id uint, user *models.User) (*models.User, erro
 		return nil, err
 	}
 	if oldUser.ID == 0 {
-		return nil, fmt.Errorf("user with ID %d not found", id)
+		return nil, utils.ErrNotFound
 	}
 	oldUser.Surname = user.Surname
 	oldUser.Lastname = user.Lastname
@@ -69,7 +66,7 @@ func (ur *userRepository) Delete(id uint) error {
 		return err
 	}
 	if user.ID == 0 {
-		return fmt.Errorf("user with ID %d not found", id)
+		return utils.ErrNotFound
 	}
 	return ur.db.Delete(&user).Error
 }

@@ -1,9 +1,12 @@
 package controllers
 
 import (
+	"errors"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github/jorgemvv01/go-api/models"
 	"github/jorgemvv01/go-api/repositories"
+	"github/jorgemvv01/go-api/utils"
 	"net/http"
 	"strconv"
 )
@@ -29,14 +32,14 @@ func NewTypeController(repository repositories.TypeRepository) TypeController {
 func (tc *typeController) Create(c *gin.Context) {
 	var typeMovie *models.Type
 	if err := c.ShouldBindJSON(&typeMovie); err != nil {
-		c.JSON(http.StatusBadRequest, models.Response{
+		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
 			Status:  "Error",
 			Message: `Invalid request body... ` + err.Error(),
 		})
 		return
 	}
 	if err := tc.typeRepository.Create(typeMovie); err != nil {
-		c.JSON(http.StatusInternalServerError, models.Response{
+		c.AbortWithStatusJSON(http.StatusInternalServerError, models.Response{
 			Status:  "Error",
 			Message: `Unable to create type... ` + err.Error(),
 		})
@@ -54,32 +57,40 @@ func (tc *typeController) Create(c *gin.Context) {
 // @Description Get Type by ID
 // @Param ID path string true "Get Type by ID"
 // @Produce application/json
-// @Tags Type Movie
+// @Tags Movie Type
 // @Success 200 {object} models.Response{}
 // @Failure 400 {object} models.Response{}
+// @Failure 404 {object} models.Response{}
 // @Failure 500 {object} models.Response{}
-// @Router /type/{ID} [get]
+// @Router /types/{ID} [get]
 func (tc *typeController) GetByID(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, models.Response{
+		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
 			Status:  "Error",
 			Message: "Invalid type ID",
 		})
 		return
 	}
-	var typeMovie *models.Type
-	if typeMovie, err = tc.typeRepository.GetByID(uint(id)); err != nil {
-		c.JSON(http.StatusInternalServerError, models.Response{
+	var movieType *models.Type
+	if movieType, err = tc.typeRepository.GetByID(uint(id)); err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, models.Response{
 			Status:  "Success",
 			Message: `Unable to get type... ` + err.Error(),
+		})
+		return
+	}
+	if movieType.ID == 0 {
+		c.AbortWithStatusJSON(http.StatusNotFound, models.Response{
+			Status:  "Error",
+			Message: fmt.Sprintf("Type with ID %d not found", uint(id)),
 		})
 		return
 	}
 	c.JSON(http.StatusOK, models.Response{
 		Status:  "Success",
 		Message: "Type created successfully",
-		Data:    typeMovie,
+		Data:    movieType,
 	})
 }
 
@@ -87,15 +98,15 @@ func (tc *typeController) GetByID(c *gin.Context) {
 // @Summary Get all Types
 // @Description Get all Types
 // @Produce application/json
-// @Tags Type Movie
+// @Tags Movie Type
 // @Success 200 {object} models.Response{}
 // @Failure 400 {object} models.Response{}
 // @Failure 500 {object} models.Response{}
-// @Router /type/ [get]
+// @Router /types/ [get]
 func (tc *typeController) GetAll(c *gin.Context) {
 	typesMovie, err := tc.typeRepository.GetAll()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, models.Response{
+		c.AbortWithStatusJSON(http.StatusInternalServerError, models.Response{
 			Status:  "Error",
 			Message: `Unable to get types... ` + err.Error(),
 		})
@@ -124,25 +135,32 @@ func (tc *typeController) Update(c *gin.Context) {
 		})
 		return
 	}
-	var typeMovie *models.Type
-	if err = c.ShouldBindJSON(&typeMovie); err != nil {
-		c.JSON(http.StatusBadRequest, models.Response{
+	var movieType *models.Type
+	if err = c.ShouldBindJSON(&movieType); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
 			Status:  "Error",
 			Message: `Invalid request body... ` + err.Error(),
 		})
 		return
 	}
-	if typeMovie, err = tc.typeRepository.Update(uint(id), typeMovie); err != nil {
-		c.JSON(http.StatusInternalServerError, models.Response{
-			Status:  "Error",
-			Message: `Unable to update type... ` + err.Error(),
-		})
+	if movieType, err = tc.typeRepository.Update(uint(id), movieType); err != nil {
+		if errors.Is(err, utils.ErrNotFound) {
+			c.AbortWithStatusJSON(http.StatusNotFound, models.Response{
+				Status:  "Error",
+				Message: fmt.Sprintf("Type with ID %d not found", uint(id)),
+			})
+		} else {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, models.Response{
+				Status:  "Error",
+				Message: `Unable to update type... ` + err.Error(),
+			})
+		}
 		return
 	}
 	c.JSON(http.StatusOK, models.Response{
 		Status:  "Success",
 		Message: "Type updated successfully",
-		Data:    typeMovie,
+		Data:    movieType,
 	})
 }
 
@@ -156,10 +174,17 @@ func (tc *typeController) Delete(c *gin.Context) {
 		return
 	}
 	if err = tc.typeRepository.Delete(uint(id)); err != nil {
-		c.JSON(http.StatusInternalServerError, models.Response{
-			Status:  "Success",
-			Message: `Unable to delete type... ` + err.Error(),
-		})
+		if errors.Is(err, utils.ErrNotFound) {
+			c.AbortWithStatusJSON(http.StatusNotFound, models.Response{
+				Status:  "Error",
+				Message: fmt.Sprintf("Type with ID %d not found", uint(id)),
+			})
+		} else {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, models.Response{
+				Status:  "Error",
+				Message: `Unable to delete type... ` + err.Error(),
+			})
+		}
 		return
 	}
 	c.JSON(http.StatusOK, models.Response{

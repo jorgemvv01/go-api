@@ -1,5 +1,10 @@
 basePath: /api
 definitions:
+  models.GenreRequest:
+    properties:
+      name:
+        type: string
+    type: object
   models.Response:
     properties:
       Data: {}
@@ -17,11 +22,155 @@ definitions:
     type: object
 info:
   contact: {}
-  description: 'A simple API to manage movie rentals, \n GitHub Repository: https://github.com/jorgemvv01/go-api'
+  description: 'A simple API to manage movie rentals \n GitHub Repository: https://github.com/jorgemvv01/go-api'
   title: VideoClub Go - REST API
   version: "1.0"
 paths:
-  /type/:
+  /genres:
+    get:
+      description: Get all Genres.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Get all Genres
+      tags:
+      - Movie Genre
+  /genres/{ID}:
+    get:
+      description: Get a genre by ID.
+      parameters:
+      - description: Get genre by ID
+        in: path
+        name: ID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Get Genre by ID
+      tags:
+      - Movie Genre
+  /genres/create:
+    post:
+      description: Create a new genre.
+      parameters:
+      - description: Create genre
+        in: body
+        name: tags
+        required: true
+        schema:
+          $ref: '#/definitions/models.GenreRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Create Genre
+      tags:
+      - Movie Genre
+  /genres/delete/{ID}:
+    delete:
+      description: Delete Genre by ID.
+      parameters:
+      - description: Delete genre by ID
+        in: path
+        name: ID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Delete Genre
+      tags:
+      - Movie Genre
+  /genres/update/{ID}:
+    patch:
+      description: Update Genre by ID.
+      parameters:
+      - description: Update genre by ID
+        in: path
+        name: ID
+        required: true
+        type: string
+      - description: Create genre
+        in: body
+        name: tags
+        required: true
+        schema:
+          $ref: '#/definitions/models.GenreRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Update Genre
+      tags:
+      - Movie Genre
+  /types/:
     get:
       description: Get all Types
       produces:
@@ -41,8 +190,8 @@ paths:
             $ref: '#/definitions/models.Response'
       summary: Get all Types
       tags:
-      - Type Movie
-  /type/{ID}:
+      - Movie Type
+  /types/{ID}:
     get:
       description: Get Type by ID
       parameters:
@@ -62,13 +211,17 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Response'
       summary: Get Type by ID
       tags:
-      - Type Movie
+      - Movie Type
   /users:
     get:
       description: Get all Users.
@@ -77,10 +230,6 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            $ref: '#/definitions/models.Response'
-        "400":
-          description: Bad Request
           schema:
             $ref: '#/definitions/models.Response'
         "500":
@@ -108,6 +257,10 @@ paths:
             $ref: '#/definitions/models.Response'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
           schema:
             $ref: '#/definitions/models.Response'
         "500":
@@ -165,6 +318,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
         "500":
           description: Internal Server Error
           schema:
@@ -196,6 +353,10 @@ paths:
             $ref: '#/definitions/models.Response'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
           schema:
             $ref: '#/definitions/models.Response'
         "500":
