@@ -2,46 +2,25 @@ package tests_controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github/jorgemvv01/go-api/controllers"
 	"github/jorgemvv01/go-api/models"
 	"github/jorgemvv01/go-api/repositories"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
 )
 
-func setupDB() (*gorm.DB, error) {
-	db, err := gorm.Open(sqlite.Open("file::memory:?cache=shared"), &gorm.Config{})
-	if err != nil {
-		return nil, fmt.Errorf("failed to connect memory database: %v", err)
-	}
-	if err = db.AutoMigrate(&models.User{}); err != nil {
-		return nil, fmt.Errorf("failed to migrate User model: %v", err)
-	}
-	return db, nil
-}
-
-func dropUserTable(db *gorm.DB) error {
-	if err := db.Migrator().DropTable(&models.User{}); err != nil {
-		return fmt.Errorf("failed to drop User table: %v", err)
-	}
-	return nil
-}
-
 func TestCreateUser(t *testing.T) {
 	router := gin.Default()
-	db, err := setupDB()
+	db, err := setupDB(models.User{})
 	if err != nil {
-		t.Fatalf("failed to setup database: %v", err)
+		t.Fatal(err)
 	}
 	defer func() {
-		if err = dropUserTable(db); err != nil {
-			t.Errorf("error cleaning User table: %v", err)
+		if err = dropTable(db, models.User{}); err != nil {
+			t.Error(err)
 		}
 	}()
 
@@ -49,10 +28,7 @@ func TestCreateUser(t *testing.T) {
 	userController := controllers.NewUserController(userRepository)
 
 	requestBody := `{"surname":"Jorge","lastname":"Villarreal"}`
-	request, err := http.NewRequest("POST", "/users/create", strings.NewReader(requestBody))
-	if err != nil {
-		t.Fatal(err)
-	}
+	request := httptest.NewRequest("POST", "/users/create", strings.NewReader(requestBody))
 	request.Header.Set("Content-Type", "application/json")
 	rr := httptest.NewRecorder()
 
@@ -73,13 +49,13 @@ func TestCreateUser(t *testing.T) {
 
 func TestGetUserByID(t *testing.T) {
 	router := gin.Default()
-	db, err := setupDB()
+	db, err := setupDB(models.User{})
 	if err != nil {
-		t.Fatalf("failed to setup database: %v", err)
+		t.Fatal(err)
 	}
 	defer func() {
-		if err = dropUserTable(db); err != nil {
-			t.Errorf("error cleaning User table: %v", err)
+		if err = dropTable(db, models.User{}); err != nil {
+			t.Error(err)
 		}
 	}()
 
@@ -93,10 +69,7 @@ func TestGetUserByID(t *testing.T) {
 	userRepository := repositories.NewUserRepository(db)
 	userController := controllers.NewUserController(userRepository)
 
-	request, err := http.NewRequest("GET", "/users/1", strings.NewReader(""))
-	if err != nil {
-		t.Fatal(err)
-	}
+	request := httptest.NewRequest("GET", "/users/1", nil)
 	request.Header.Set("Content-Type", "application/json")
 	rr := httptest.NewRecorder()
 
@@ -127,13 +100,13 @@ func TestGetUserByID(t *testing.T) {
 
 func TestGetAllUser(t *testing.T) {
 	router := gin.Default()
-	db, err := setupDB()
+	db, err := setupDB(models.User{})
 	if err != nil {
-		t.Fatalf("failed to setup database: %v", err)
+		t.Fatal(err)
 	}
 	defer func() {
-		if err = dropUserTable(db); err != nil {
-			t.Errorf("error cleaning User table: %v", err)
+		if err = dropTable(db, models.User{}); err != nil {
+			t.Error(err)
 		}
 	}()
 
@@ -151,10 +124,7 @@ func TestGetAllUser(t *testing.T) {
 	userRepository := repositories.NewUserRepository(db)
 	userController := controllers.NewUserController(userRepository)
 
-	request, err := http.NewRequest("GET", "/users", strings.NewReader(""))
-	if err != nil {
-		t.Fatal(err)
-	}
+	request := httptest.NewRequest("GET", "/users", nil)
 
 	request.Header.Set("Content-Type", "application/json")
 	rr := httptest.NewRecorder()
@@ -183,13 +153,13 @@ func TestGetAllUser(t *testing.T) {
 
 func TestUpdateUser(t *testing.T) {
 	router := gin.Default()
-	db, err := setupDB()
+	db, err := setupDB(models.User{})
 	if err != nil {
-		t.Fatalf("failed to setup database: %v", err)
+		t.Fatal(err)
 	}
 	defer func() {
-		if err = dropUserTable(db); err != nil {
-			t.Errorf("error cleaning User table: %v", err)
+		if err = dropTable(db, models.User{}); err != nil {
+			t.Error(err)
 		}
 	}()
 
@@ -203,10 +173,7 @@ func TestUpdateUser(t *testing.T) {
 	userController := controllers.NewUserController(userRepository)
 
 	requestBody := `{"surname":"Jorge","lastname":"Villarreal"}`
-	request, err := http.NewRequest("PATCH", "/users/update/1", strings.NewReader(requestBody))
-	if err != nil {
-		t.Fatal(err)
-	}
+	request := httptest.NewRequest("PATCH", "/users/update/1", strings.NewReader(requestBody))
 
 	request.Header.Set("Content-Type", "application/json")
 	rr := httptest.NewRecorder()
@@ -240,13 +207,13 @@ func TestUpdateUser(t *testing.T) {
 
 func TestDeleteUser(t *testing.T) {
 	router := gin.Default()
-	db, err := setupDB()
+	db, err := setupDB(models.User{})
 	if err != nil {
-		t.Fatalf("failed to setup database: %v", err)
+		t.Fatal(err)
 	}
 	defer func() {
-		if err = dropUserTable(db); err != nil {
-			t.Errorf("error cleaning User table: %v", err)
+		if err = dropTable(db, models.User{}); err != nil {
+			t.Error(err)
 		}
 	}()
 
@@ -259,10 +226,7 @@ func TestDeleteUser(t *testing.T) {
 	userRepository := repositories.NewUserRepository(db)
 	userController := controllers.NewUserController(userRepository)
 
-	request, err := http.NewRequest("DELETE", "/users/delete/1", strings.NewReader(""))
-	if err != nil {
-		t.Fatal(err)
-	}
+	request := httptest.NewRequest("DELETE", "/users/delete/1", nil)
 
 	request.Header.Set("Content-Type", "application/json")
 	rr := httptest.NewRecorder()
