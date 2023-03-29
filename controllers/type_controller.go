@@ -165,7 +165,7 @@ func (tc *typeController) Update(c *gin.Context) {
 }
 
 func (tc *typeController) Delete(c *gin.Context) {
-	id, err := strconv.ParseUint(c.Param("10"), 10, 64)
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, models.Response{
 			Status:  "Error",

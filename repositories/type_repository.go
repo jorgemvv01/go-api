@@ -49,7 +49,7 @@ func (tr *typeRepository) Update(id uint, movieType *models.Type) (*models.Type,
 	if err := tr.db.Find(&oldMovieType, id).Error; err != nil {
 		return nil, err
 	}
-	if movieType.ID == 0 {
+	if oldMovieType.ID == 0 {
 		return nil, utils.ErrNotFound
 	}
 	oldMovieType.Name = movieType.Name
