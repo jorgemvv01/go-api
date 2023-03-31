@@ -12,28 +12,28 @@ import (
 	"testing"
 )
 
-func TestCreateType(t *testing.T) {
+func TestCreateGenre(t *testing.T) {
 	router := gin.Default()
-	db, err := setupDB(models.Type{})
+	db, err := setupDB(models.Genre{})
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer func() {
-		if err = dropTable(db, models.Type{}); err != nil {
+		if err = dropTable(db, models.Genre{}); err != nil {
 			t.Fatal(err)
 		}
 	}()
 
-	typeRepository := repositories.NewTypeRepository(db)
-	typeController := controllers.NewTypeController(typeRepository)
+	genreRepository := repositories.NewGenreRepository(db)
+	genreController := controllers.NewGenreController(genreRepository)
 
-	requestBody := `{"name":"New releases"}`
-	request := httptest.NewRequest("POST", "/types/create", strings.NewReader(requestBody))
+	requestBody := `{"name":"Action"}`
+	request := httptest.NewRequest("POST", "/genres/create", strings.NewReader(requestBody))
 	request.Header.Set("Content-Type", "application/json")
 
 	rr := httptest.NewRecorder()
 
-	router.POST("/types/create", typeController.Create)
+	router.POST("/genres/create", genreController.Create)
 	router.ServeHTTP(rr, request)
 
 	if status := rr.Code; status != http.StatusOK {
@@ -41,39 +41,39 @@ func TestCreateType(t *testing.T) {
 			status, http.StatusOK)
 	}
 
-	var movieType *models.Type
-	db.Last(&movieType)
-	if movieType.Name != "New releases" {
-		t.Errorf("Unexpected type name: %v", movieType)
+	var genre *models.Genre
+	db.Last(&genre)
+	if genre.Name != "Action" {
+		t.Errorf("Unexpected genre name: %v", genre.Name)
 	}
 }
 
-func TestGetTypeByID(t *testing.T) {
+func TestGetGenreByID(t *testing.T) {
 	router := gin.Default()
-	db, err := setupDB(models.Type{})
+	db, err := setupDB(models.Genre{})
 	if err != nil {
 		t.Error(err)
 	}
 	defer func() {
-		if err = dropTable(db, models.Type{}); err != nil {
+		if err = dropTable(db, models.Genre{}); err != nil {
 			t.Error(err)
 		}
 	}()
 
-	movieType := models.Type{
-		Name: "New releases",
+	genre := models.Genre{
+		Name: "Action",
 	}
-	db.Create(&movieType)
+	db.Create(&genre)
 
-	typeRepository := repositories.NewTypeRepository(db)
-	typeController := controllers.NewTypeController(typeRepository)
+	genreRepository := repositories.NewGenreRepository(db)
+	genreController := controllers.NewGenreController(genreRepository)
 
-	request := httptest.NewRequest("GET", "/types/1", nil)
+	request := httptest.NewRequest("GET", "/genres/1", nil)
 	request.Header.Set("Content-Type", "application/json")
 
 	rr := httptest.NewRecorder()
 
-	router.GET("/types/:id", typeController.GetByID)
+	router.GET("/genres/:id", genreController.GetByID)
 	router.ServeHTTP(rr, request)
 
 	if status := rr.Code; status != http.StatusOK {
@@ -90,41 +90,41 @@ func TestGetTypeByID(t *testing.T) {
 	if !ok {
 		t.Errorf("Bad data response structure")
 	}
-	if data["Name"] != "New releases" {
+	if data["Name"] != "Action" {
 		t.Errorf("Name does not match")
 	}
 }
 
-func TestGetAllType(t *testing.T) {
+func TestGetAllGenre(t *testing.T) {
 	router := gin.Default()
-	db, err := setupDB(models.Type{})
+	db, err := setupDB(models.Genre{})
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer func() {
-		if err = dropTable(db, models.Type{}); err != nil {
+		if err = dropTable(db, models.Genre{}); err != nil {
 			t.Error(err)
 		}
 	}()
 
-	type1 := models.Type{
-		Name: "New releases",
+	genre1 := models.Genre{
+		Name: "Action",
 	}
-	type2 := models.Type{
-		Name: "Regular movies",
+	genre2 := models.Genre{
+		Name: "Comedy",
 	}
-	db.Create(&type1)
-	db.Create(&type2)
+	db.Create(&genre1)
+	db.Create(&genre2)
 
-	typeRepository := repositories.NewTypeRepository(db)
-	typeController := controllers.NewTypeController(typeRepository)
+	genreRepository := repositories.NewGenreRepository(db)
+	genreController := controllers.NewGenreController(genreRepository)
 
-	request := httptest.NewRequest("GET", "/types", nil)
+	request := httptest.NewRequest("GET", "/genres", nil)
 	request.Header.Set("Content-Type", "application/json")
 
 	rr := httptest.NewRecorder()
 
-	router.GET("/types", typeController.GetAll)
+	router.GET("/genres", genreController.GetAll)
 	router.ServeHTTP(rr, request)
 
 	if status := rr.Code; status != http.StatusOK {
@@ -142,38 +142,38 @@ func TestGetAllType(t *testing.T) {
 		t.Errorf("Bad data response structure")
 	}
 	if len(data) != 2 {
-		t.Errorf("No 2 movie types found")
+		t.Errorf("No 2 movie genres found")
 	}
 }
 
-func TestUpdateType(t *testing.T) {
+func TestUpdateGenre(t *testing.T) {
 	router := gin.Default()
-	db, err := setupDB(models.Type{})
+	db, err := setupDB(models.Genre{})
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer func() {
-		if err = dropTable(db, models.Type{}); err != nil {
+		if err = dropTable(db, models.Genre{}); err != nil {
 			t.Error(err)
 		}
 	}()
 
-	movieType := models.Type{
-		Name: "New releases",
+	genre := models.Genre{
+		Name: "Action",
 	}
 
-	db.Create(&movieType)
+	db.Create(&genre)
 
-	typeRepository := repositories.NewTypeRepository(db)
-	typeController := controllers.NewTypeController(typeRepository)
+	genreRepository := repositories.NewGenreRepository(db)
+	genreController := controllers.NewGenreController(genreRepository)
 
-	requestBody := `{"name":"Regular movies"}`
-	request := httptest.NewRequest("PATCH", "/types/update/1", strings.NewReader(requestBody))
+	requestBody := `{"name":"Comedy"}`
+	request := httptest.NewRequest("PATCH", "/genres/update/1", strings.NewReader(requestBody))
 	request.Header.Set("Content-Type", "application/json")
 
 	rr := httptest.NewRecorder()
 
-	router.PATCH("/types/update/:id", typeController.Update)
+	router.PATCH("/genres/update/:id", genreController.Update)
 	router.ServeHTTP(rr, request)
 
 	if status := rr.Code; status != http.StatusOK {
@@ -192,36 +192,36 @@ func TestUpdateType(t *testing.T) {
 		t.Errorf("Bad data response structure")
 	}
 
-	if data["Name"] != "Regular movies" {
-		t.Errorf("Type name does not match")
+	if data["Name"] != "Comedy" {
+		t.Errorf("Genre name does not match")
 	}
 }
 
-func TestDeleteType(t *testing.T) {
+func TestDeleteGenre(t *testing.T) {
 	router := gin.Default()
-	db, err := setupDB(models.Type{})
+	db, err := setupDB(models.Genre{})
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer func() {
-		if err = dropTable(db, models.Type{}); err != nil {
+		if err = dropTable(db, models.Genre{}); err != nil {
 			t.Error(err)
 		}
 	}()
 
-	movieType := models.Type{
-		Name: "New releases",
+	genre := models.Genre{
+		Name: "Action",
 	}
-	db.Create(&movieType)
+	db.Create(&genre)
 
-	typeRepository := repositories.NewTypeRepository(db)
-	typeController := controllers.NewTypeController(typeRepository)
+	genreRepository := repositories.NewGenreRepository(db)
+	genreController := controllers.NewGenreController(genreRepository)
 
-	request := httptest.NewRequest("DELETE", "/types/delete/1", nil)
+	request := httptest.NewRequest("DELETE", "/genres/delete/1", nil)
 	request.Header.Set("Content-Type", "application/json")
 	rr := httptest.NewRecorder()
 
-	router.DELETE("/types/delete/:id", typeController.Delete)
+	router.DELETE("/genres/delete/:id", genreController.Delete)
 	router.ServeHTTP(rr, request)
 
 	if status := rr.Code; status != http.StatusOK {
@@ -230,8 +230,8 @@ func TestDeleteType(t *testing.T) {
 
 	var responseBody models.Response
 	json.Unmarshal(rr.Body.Bytes(), &responseBody)
-	if responseBody.Message != "Type deleted successfully" {
-		t.Error("Movie type could not be deleted successfully")
+	if responseBody.Message != "Genre deleted successfully" {
+		t.Error("Movie genre could not be deleted successfully")
 	}
 
 }
