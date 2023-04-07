@@ -90,7 +90,7 @@ func TestGetTypeByID(t *testing.T) {
 	if !ok {
 		t.Errorf("Bad data response structure")
 	}
-	if data["Name"] != "New releases" {
+	if data["name"] != "New releases" {
 		t.Errorf("Name does not match")
 	}
 }
@@ -168,12 +168,12 @@ func TestUpdateType(t *testing.T) {
 	typeController := controllers.NewTypeController(typeRepository)
 
 	requestBody := `{"name":"Regular movies"}`
-	request := httptest.NewRequest("PATCH", "/types/update/1", strings.NewReader(requestBody))
+	request := httptest.NewRequest("PUT", "/types/update/1", strings.NewReader(requestBody))
 	request.Header.Set("Content-Type", "application/json")
 
 	rr := httptest.NewRecorder()
 
-	router.PATCH("/types/update/:id", typeController.Update)
+	router.PUT("/types/update/:id", typeController.Update)
 	router.ServeHTTP(rr, request)
 
 	if status := rr.Code; status != http.StatusOK {
@@ -192,7 +192,7 @@ func TestUpdateType(t *testing.T) {
 		t.Errorf("Bad data response structure")
 	}
 
-	if data["Name"] != "Regular movies" {
+	if data["name"] != "Regular movies" {
 		t.Errorf("Type name does not match")
 	}
 }

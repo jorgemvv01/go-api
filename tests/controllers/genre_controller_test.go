@@ -90,7 +90,7 @@ func TestGetGenreByID(t *testing.T) {
 	if !ok {
 		t.Errorf("Bad data response structure")
 	}
-	if data["Name"] != "Action" {
+	if data["name"] != "Action" {
 		t.Errorf("Name does not match")
 	}
 }
@@ -168,12 +168,12 @@ func TestUpdateGenre(t *testing.T) {
 	genreController := controllers.NewGenreController(genreRepository)
 
 	requestBody := `{"name":"Comedy"}`
-	request := httptest.NewRequest("PATCH", "/genres/update/1", strings.NewReader(requestBody))
+	request := httptest.NewRequest("PUT", "/genres/update/1", strings.NewReader(requestBody))
 	request.Header.Set("Content-Type", "application/json")
 
 	rr := httptest.NewRecorder()
 
-	router.PATCH("/genres/update/:id", genreController.Update)
+	router.PUT("/genres/update/:id", genreController.Update)
 	router.ServeHTTP(rr, request)
 
 	if status := rr.Code; status != http.StatusOK {
@@ -192,7 +192,7 @@ func TestUpdateGenre(t *testing.T) {
 		t.Errorf("Bad data response structure")
 	}
 
-	if data["Name"] != "Comedy" {
+	if data["name"] != "Comedy" {
 		t.Errorf("Genre name does not match")
 	}
 }

@@ -8,9 +8,9 @@ import (
 
 type TypeRepository interface {
 	Create(movieType *models.Type) error
-	GetByID(id uint) (*models.Type, error)
-	GetAll() (*[]models.Type, error)
-	Update(id uint, movieType *models.Type) (*models.Type, error)
+	GetByID(id uint) (*models.TypeResponse, error)
+	GetAll() (*[]models.TypeResponse, error)
+	Update(id uint, movieType *models.Type) (*models.TypeResponse, error)
 	Delete(id uint) error
 }
 
@@ -28,23 +28,27 @@ func (tr *typeRepository) Create(movieType *models.Type) error {
 	return tr.db.Create(&movieType).Error
 }
 
-func (tr *typeRepository) GetByID(id uint) (*models.Type, error) {
+func (tr *typeRepository) GetByID(id uint) (*models.TypeResponse, error) {
 	var movieType *models.Type
 	if err := tr.db.Find(&movieType, id).Error; err != nil {
 		return nil, err
 	}
-	return movieType, nil
+	return models.NewTypeResponse(*movieType), nil
 }
 
-func (tr *typeRepository) GetAll() (*[]models.Type, error) {
-	var typesMovie *[]models.Type
-	if err := tr.db.Find(&typesMovie).Error; err != nil {
-		return typesMovie, err
+func (tr *typeRepository) GetAll() (*[]models.TypeResponse, error) {
+	var movieTypes *[]models.Type
+	if err := tr.db.Find(&movieTypes).Error; err != nil {
+		return nil, err
 	}
-	return typesMovie, nil
+	var movieTypeResponse []models.TypeResponse
+	for _, movieType := range *movieTypes {
+		movieTypeResponse = append(movieTypeResponse, *models.NewTypeResponse(movieType))
+	}
+	return &movieTypeResponse, nil
 }
 
-func (tr *typeRepository) Update(id uint, movieType *models.Type) (*models.Type, error) {
+func (tr *typeRepository) Update(id uint, movieType *models.Type) (*models.TypeResponse, error) {
 	var oldMovieType *models.Type
 	if err := tr.db.Find(&oldMovieType, id).Error; err != nil {
 		return nil, err
@@ -56,7 +60,7 @@ func (tr *typeRepository) Update(id uint, movieType *models.Type) (*models.Type,
 	if err := tr.db.Save(&oldMovieType).Error; err != nil {
 		return nil, err
 	}
-	return oldMovieType, nil
+	return models.NewTypeResponse(*oldMovieType), nil
 }
 
 func (tr *typeRepository) Delete(id uint) error {

@@ -16,6 +16,6 @@ func RegisterTypeRoutes(router *gin.RouterGroup) {
 	typeRouter.GET("/", typeController.GetAll)
 	typeRouter.GET("/:id", typeController.GetByID)
 	//typeRouter.POST("/create", typeController.Create)
-	//typeRouter.PATCH("/update/:id", typeController.Update)
+	//typeRouter.PUT("/update/:id", typeController.Update)
 	//typeRouter.DELETE("/delete/:id", typeController.Delete)
 }

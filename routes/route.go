@@ -14,6 +14,7 @@ func SetupRoutes() *gin.Engine {
 		RegisterUserRouter(api)
 		RegisterTypeRoutes(api)
 		RegisterGenreRoutes(api)
+		RegisterMovieRouter(api)
 	}
 
 	return router

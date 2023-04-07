@@ -5,12 +5,27 @@ definitions:
       name:
         type: string
     type: object
+  models.MovieRequest:
+    properties:
+      genre_id:
+        type: integer
+      name:
+        type: string
+      overview:
+        type: string
+      price:
+        type: number
+      release_date:
+        type: string
+      type_id:
+        type: integer
+    type: object
   models.Response:
     properties:
-      Data: {}
-      Message:
+      data: {}
+      message:
         type: string
-      Status:
+      status:
         type: string
     type: object
   models.UserRequest:
@@ -134,7 +149,7 @@ paths:
       tags:
       - Movie Genre
   /genres/update/{ID}:
-    patch:
+    put:
       description: Update Genre by ID.
       parameters:
       - description: Update genre by ID
@@ -142,7 +157,7 @@ paths:
         name: ID
         required: true
         type: string
-      - description: Create genre
+      - description: Update genre
         in: body
         name: tags
         required: true
@@ -170,6 +185,150 @@ paths:
       summary: Update Genre
       tags:
       - Movie Genre
+  /movies:
+    get:
+      description: Get all Movies.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Get all Movies
+      tags:
+      - Movies
+  /movies/{ID}:
+    get:
+      description: Get a movie by ID.
+      parameters:
+      - description: Get movie by ID
+        in: path
+        name: ID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Get Movie by ID
+      tags:
+      - Movies
+  /movies/create:
+    post:
+      description: Create a new movie.
+      parameters:
+      - description: Create movie
+        in: body
+        name: tags
+        required: true
+        schema:
+          $ref: '#/definitions/models.MovieRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Create Movie
+      tags:
+      - Movies
+  /movies/delete/{ID}:
+    delete:
+      description: Delete Movie by ID.
+      parameters:
+      - description: Delete Movie by ID
+        in: path
+        name: ID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Delete Movie
+      tags:
+      - Movies
+  /movies/update/{ID}:
+    put:
+      description: Update Movie by ID.
+      parameters:
+      - description: Update movie by ID
+        in: path
+        name: ID
+        required: true
+        type: string
+      - description: Update movie
+        in: body
+        name: tags
+        required: true
+        schema:
+          $ref: '#/definitions/models.MovieRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Update Movie
+      tags:
+      - Movies
   /types/:
     get:
       description: Get all Types
@@ -330,7 +489,7 @@ paths:
       tags:
       - Users
   /users/update/{ID}:
-    patch:
+    put:
       description: Update User by ID.
       parameters:
       - description: Update user by ID
@@ -338,7 +497,7 @@ paths:
         name: ID
         required: true
         type: string
-      - description: Create user
+      - description: Update user
         in: body
         name: tags
         required: true

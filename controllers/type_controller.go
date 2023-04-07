@@ -30,15 +30,15 @@ func NewTypeController(repository repositories.TypeRepository) TypeController {
 }
 
 func (tc *typeController) Create(c *gin.Context) {
-	var typeMovie *models.Type
-	if err := c.ShouldBindJSON(&typeMovie); err != nil {
+	var movieType *models.Type
+	if err := c.ShouldBindJSON(&movieType); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
 			Status:  "Error",
 			Message: `Invalid request body... ` + err.Error(),
 		})
 		return
 	}
-	if err := tc.typeRepository.Create(typeMovie); err != nil {
+	if err := tc.typeRepository.Create(movieType); err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, models.Response{
 			Status:  "Error",
 			Message: `Unable to create type... ` + err.Error(),
@@ -48,7 +48,7 @@ func (tc *typeController) Create(c *gin.Context) {
 	c.JSON(http.StatusOK, models.Response{
 		Status:  "Success",
 		Message: "Type created successfully",
-		Data:    typeMovie,
+		Data:    models.NewTypeResponse(*movieType),
 	})
 }
 
@@ -72,7 +72,7 @@ func (tc *typeController) GetByID(c *gin.Context) {
 		})
 		return
 	}
-	var movieType *models.Type
+	var movieType *models.TypeResponse
 	if movieType, err = tc.typeRepository.GetByID(uint(id)); err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, models.Response{
 			Status:  "Success",
@@ -143,7 +143,8 @@ func (tc *typeController) Update(c *gin.Context) {
 		})
 		return
 	}
-	if movieType, err = tc.typeRepository.Update(uint(id), movieType); err != nil {
+	var movieTypeResponse *models.TypeResponse
+	if movieTypeResponse, err = tc.typeRepository.Update(uint(id), movieType); err != nil {
 		if errors.Is(err, utils.ErrNotFound) {
 			c.AbortWithStatusJSON(http.StatusNotFound, models.Response{
 				Status:  "Error",
@@ -160,7 +161,7 @@ func (tc *typeController) Update(c *gin.Context) {
 	c.JSON(http.StatusOK, models.Response{
 		Status:  "Success",
 		Message: "Type updated successfully",
-		Data:    movieType,
+		Data:    movieTypeResponse,
 	})
 }
 

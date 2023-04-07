@@ -90,10 +90,10 @@ func TestGetUserByID(t *testing.T) {
 	if !ok {
 		t.Errorf("Bad data response structure")
 	}
-	if data["Surname"] != "John" {
+	if data["surname"] != "John" {
 		t.Errorf("Surname does not match")
 	}
-	if data["Lastname"] != "Doe" {
+	if data["lastname"] != "Doe" {
 		t.Errorf("Lastname does not match")
 	}
 }
@@ -173,12 +173,12 @@ func TestUpdateUser(t *testing.T) {
 	userController := controllers.NewUserController(userRepository)
 
 	requestBody := `{"surname":"Jorge","lastname":"Villarreal"}`
-	request := httptest.NewRequest("PATCH", "/users/update/1", strings.NewReader(requestBody))
+	request := httptest.NewRequest("PUT", "/users/update/1", strings.NewReader(requestBody))
 
 	request.Header.Set("Content-Type", "application/json")
 	rr := httptest.NewRecorder()
 
-	router.PATCH("/users/update/:id", userController.Update)
+	router.PUT("/users/update/:id", userController.Update)
 	router.ServeHTTP(rr, request)
 
 	if status := rr.Code; status != http.StatusOK {
@@ -197,10 +197,10 @@ func TestUpdateUser(t *testing.T) {
 		t.Errorf("Bad data response structure")
 	}
 
-	if data["Surname"] != "Jorge" {
+	if data["surname"] != "Jorge" {
 		t.Errorf("Surname does not match")
 	}
-	if data["Lastname"] != "Villarreal" {
+	if data["lastname"] != "Villarreal" {
 		t.Errorf("Lastname does not match")
 	}
 }
