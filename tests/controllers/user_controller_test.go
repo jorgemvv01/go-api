@@ -151,7 +151,7 @@ func TestGetAllUser(t *testing.T) {
 	}
 }
 
-func TestUpdateUser(t *testing.T) {
+func TestUpdateUsers(t *testing.T) {
 	router := gin.Default()
 	db, err := setupDB(models.User{})
 	if err != nil {

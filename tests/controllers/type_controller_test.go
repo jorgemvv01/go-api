@@ -95,7 +95,7 @@ func TestGetTypeByID(t *testing.T) {
 	}
 }
 
-func TestGetAllType(t *testing.T) {
+func TestGetAllTypes(t *testing.T) {
 	router := gin.Default()
 	db, err := setupDB(models.Type{})
 	if err != nil {

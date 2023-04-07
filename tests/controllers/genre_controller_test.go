@@ -95,7 +95,7 @@ func TestGetGenreByID(t *testing.T) {
 	}
 }
 
-func TestGetAllGenre(t *testing.T) {
+func TestGetAllGenres(t *testing.T) {
 	router := gin.Default()
 	db, err := setupDB(models.Genre{})
 	if err != nil {
