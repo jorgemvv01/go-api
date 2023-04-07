@@ -8,9 +8,9 @@ import (
 
 type GenreRepository interface {
 	Create(genre *models.Genre) error
-	GetByID(id uint) (*models.Genre, error)
-	GetAll() (*[]models.Genre, error)
-	Update(id uint, genre *models.Genre) (*models.Genre, error)
+	GetByID(id uint) (*models.GenreResponse, error)
+	GetAll() (*[]models.GenreResponse, error)
+	Update(id uint, genre *models.Genre) (*models.GenreResponse, error)
 	Delete(id uint) error
 }
 
@@ -28,7 +28,7 @@ func (gr *genreRepository) Create(genre *models.Genre) error {
 	return gr.db.Create(&genre).Error
 }
 
-func (gr *genreRepository) GetByID(id uint) (*models.Genre, error) {
+func (gr *genreRepository) GetByID(id uint) (*models.GenreResponse, error) {
 	var genre *models.Genre
 	if err := gr.db.Find(&genre, id).Error; err != nil {
 		return nil, err
@@ -36,18 +36,22 @@ func (gr *genreRepository) GetByID(id uint) (*models.Genre, error) {
 	if genre.ID == 0 {
 		return nil, utils.ErrNotFound
 	}
-	return genre, nil
+	return models.NewGenreResponse(*genre), nil
 }
 
-func (gr *genreRepository) GetAll() (*[]models.Genre, error) {
+func (gr *genreRepository) GetAll() (*[]models.GenreResponse, error) {
 	var genres *[]models.Genre
 	if err := gr.db.Find(&genres).Error; err != nil {
 		return nil, err
 	}
-	return genres, nil
+	var genresResponse []models.GenreResponse
+	for _, genre := range *genres {
+		genresResponse = append(genresResponse, *models.NewGenreResponse(genre))
+	}
+	return &genresResponse, nil
 }
 
-func (gr *genreRepository) Update(id uint, genre *models.Genre) (*models.Genre, error) {
+func (gr *genreRepository) Update(id uint, genre *models.Genre) (*models.GenreResponse, error) {
 	var oldGenre *models.Genre
 	if err := gr.db.Find(&oldGenre, id).Error; err != nil {
 		return nil, err
@@ -59,7 +63,7 @@ func (gr *genreRepository) Update(id uint, genre *models.Genre) (*models.Genre, 
 	if err := gr.db.Save(&oldGenre).Error; err != nil {
 		return nil, err
 	}
-	return oldGenre, nil
+	return models.NewGenreResponse(*oldGenre), nil
 }
 
 func (gr *genreRepository) Delete(id uint) error {

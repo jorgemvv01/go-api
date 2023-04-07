@@ -16,6 +16,6 @@ func RegisterGenreRoutes(router *gin.RouterGroup) {
 	genreRouter.GET("/", genreController.GetAll)
 	genreRouter.GET("/:id", genreController.GetByID)
 	genreRouter.POST("/create", genreController.Create)
-	genreRouter.PATCH("/update/:id", genreController.Update)
+	genreRouter.PUT("/update/:id", genreController.Update)
 	genreRouter.DELETE("/delete/:id", genreController.Delete)
 }

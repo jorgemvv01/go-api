@@ -58,7 +58,7 @@ func (gc *genreController) Create(c *gin.Context) {
 	c.JSON(http.StatusOK, models.Response{
 		Status:  "Success",
 		Message: "Genre created successfully",
-		Data:    genre,
+		Data:    models.NewGenreResponse(*genre),
 	})
 }
 
@@ -140,13 +140,13 @@ func (gc *genreController) GetAll(c *gin.Context) {
 // @Description Update Genre by ID.
 // @Produce application/json
 // @Param ID path string true "Update genre by ID"
-// @Param tags body models.GenreRequest true "Create genre"
+// @Param tags body models.GenreRequest true "Update genre"
 // @Tags Movie Genre
 // @Success 200 {object} models.Response{}
 // @Failure 400 {object} models.Response{}
 // @Failure 404 {object} models.Response{}
 // @Failure 500 {object} models.Response{}
-// @Router /genres/update/{ID} [patch]
+// @Router /genres/update/{ID} [put]
 func (gc *genreController) Update(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
@@ -164,7 +164,8 @@ func (gc *genreController) Update(c *gin.Context) {
 		})
 		return
 	}
-	if genre, err = gc.repository.Update(uint(id), genre); err != nil {
+	var genreResponse *models.GenreResponse
+	if genreResponse, err = gc.repository.Update(uint(id), genre); err != nil {
 		if errors.Is(err, utils.ErrNotFound) {
 			c.AbortWithStatusJSON(http.StatusNotFound, models.Response{
 				Status:  "Error",
@@ -181,7 +182,7 @@ func (gc *genreController) Update(c *gin.Context) {
 	c.JSON(http.StatusOK, models.Response{
 		Status:  "Success",
 		Message: "Genre updated successfully",
-		Data:    genre,
+		Data:    genreResponse,
 	})
 }
 

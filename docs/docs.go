@@ -132,7 +132,7 @@ const docTemplate = `{
             }
         },
         "/genres/update/{ID}": {
-            "patch": {
+            "put": {
                 "description": "Update Genre by ID.",
                 "produces": [
                     "application/json"
@@ -150,7 +150,7 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "Create genre",
+                        "description": "Update genre",
                         "name": "tags",
                         "in": "body",
                         "required": true,
@@ -201,6 +201,225 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Get genre by ID",
+                        "name": "ID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/movies": {
+            "get": {
+                "description": "Get all Movies.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Movies"
+                ],
+                "summary": "Get all Movies",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/movies/create": {
+            "post": {
+                "description": "Create a new movie.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Movies"
+                ],
+                "summary": "Create Movie",
+                "parameters": [
+                    {
+                        "description": "Create movie",
+                        "name": "tags",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.MovieRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/movies/delete/{ID}": {
+            "delete": {
+                "description": "Delete Movie by ID.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Movies"
+                ],
+                "summary": "Delete Movie",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Delete Movie by ID",
+                        "name": "ID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/movies/update/{ID}": {
+            "put": {
+                "description": "Update Movie by ID.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Movies"
+                ],
+                "summary": "Update Movie",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Update movie by ID",
+                        "name": "ID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update movie",
+                        "name": "tags",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.MovieRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/movies/{ID}": {
+            "get": {
+                "description": "Get a movie by ID.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Movies"
+                ],
+                "summary": "Get Movie by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Get movie by ID",
                         "name": "ID",
                         "in": "path",
                         "required": true
@@ -430,7 +649,7 @@ const docTemplate = `{
             }
         },
         "/users/update/{ID}": {
-            "patch": {
+            "put": {
                 "description": "Update User by ID.",
                 "produces": [
                     "application/json"
@@ -448,7 +667,7 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "Create user",
+                        "description": "Update user",
                         "name": "tags",
                         "in": "body",
                         "required": true,
@@ -542,14 +761,37 @@ const docTemplate = `{
                 }
             }
         },
+        "models.MovieRequest": {
+            "type": "object",
+            "properties": {
+                "genre_id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "overview": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "release_date": {
+                    "type": "string"
+                },
+                "type_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "models.Response": {
             "type": "object",
             "properties": {
-                "Data": {},
-                "Message": {
+                "data": {},
+                "message": {
                     "type": "string"
                 },
-                "Status": {
+                "status": {
                     "type": "string"
                 }
             }

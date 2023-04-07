@@ -58,7 +58,7 @@ func (uc *userController) Create(c *gin.Context) {
 	c.JSON(http.StatusOK, models.Response{
 		Status:  "Success",
 		Message: "User created successfully",
-		Data:    user,
+		Data:    models.NewUserResponse(*user),
 	})
 }
 
@@ -73,7 +73,7 @@ func (uc *userController) Create(c *gin.Context) {
 // @Failure 404 {object} models.Response{}
 // @Failure 500 {object} models.Response{}
 // @Router /users/{ID} [get]
-func (ur *userController) GetByID(c *gin.Context) {
+func (uc *userController) GetByID(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
@@ -82,7 +82,7 @@ func (ur *userController) GetByID(c *gin.Context) {
 		})
 		return
 	}
-	user, err := ur.userRepository.GetByID(uint(id))
+	user, err := uc.userRepository.GetByID(uint(id))
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, models.Response{
 			Status:  "Error",
@@ -112,8 +112,8 @@ func (ur *userController) GetByID(c *gin.Context) {
 // @Success 200 {object} models.Response{}
 // @Failure 500 {object} models.Response{}
 // @Router /users [get]
-func (ur *userController) GetAll(c *gin.Context) {
-	users, err := ur.userRepository.GetAll()
+func (uc *userController) GetAll(c *gin.Context) {
+	users, err := uc.userRepository.GetAll()
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, models.Response{
 			Status:  "Error",
@@ -140,13 +140,13 @@ func (ur *userController) GetAll(c *gin.Context) {
 // @Description Update User by ID.
 // @Produce application/json
 // @Param ID path string true "Update user by ID"
-// @Param tags body models.UserRequest true "Create user"
+// @Param tags body models.UserRequest true "Update user"
 // @Tags Users
 // @Success 200 {object} models.Response{}
 // @Failure 400 {object} models.Response{}
 // @Failure 404 {object} models.Response{}
 // @Failure 500 {object} models.Response{}
-// @Router /users/update/{ID} [patch]
+// @Router /users/update/{ID} [put]
 func (uc *userController) Update(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
@@ -164,7 +164,8 @@ func (uc *userController) Update(c *gin.Context) {
 		})
 		return
 	}
-	if user, err = uc.userRepository.Update(uint(id), user); err != nil {
+	var userResponse *models.UserResponse
+	if userResponse, err = uc.userRepository.Update(uint(id), user); err != nil {
 		if errors.Is(err, utils.ErrNotFound) {
 			c.AbortWithStatusJSON(http.StatusNotFound, models.Response{
 				Status:  "Error",
@@ -181,7 +182,7 @@ func (uc *userController) Update(c *gin.Context) {
 	c.JSON(http.StatusOK, models.Response{
 		Status:  "Success",
 		Message: "User updated successfully",
-		Data:    user,
+		Data:    userResponse,
 	})
 }
 
