@@ -9,8 +9,10 @@ type Movie struct {
 	Name        string  `json:"name" binding:"required" gorm:"not null"`
 	Overview    string  `json:"overview" binding:"required" gorm:"not null"`
 	Price       float64 `json:"price" binding:"required" gorm:"not null"`
-	TypeID      uint    `json:"type_id" binding:"required" gorm:"foreignKey:GenreID"`
-	GenreID     uint    `json:"genre_id" binding:"required" gorm:"foreignKey:GenreID"`
+	TypeID      uint    `json:"type_id" binding:"required"`
+	Type        Type    `gorm:"foreignKey:TypeID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" binding:"-"`
+	GenreID     uint    `json:"genre_id" binding:"required"`
+	Genre       Genre   `gorm:"foreignKey:GenreID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" binding:"-"`
 	ReleaseDate string  `json:"release_date" binding:"required" gorm:"not null"`
 }
 
