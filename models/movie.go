@@ -2,7 +2,6 @@ package models
 
 import (
 	"gorm.io/gorm"
-	"time"
 )
 
 type Movie struct {
@@ -16,12 +15,19 @@ type Movie struct {
 }
 
 type MovieRequest struct {
-	Name        string    `json:"name"`
-	Overview    string    `json:"overview"`
-	Price       float64   `json:"price"`
-	TypeID      uint      `json:"type_id"`
-	GenreID     uint      `json:"genre_id"`
-	ReleaseDate time.Time `json:"release_date"`
+	Name        string  `json:"name"`
+	Overview    string  `json:"overview"`
+	Price       float64 `json:"price"`
+	TypeID      uint    `json:"type_id"`
+	GenreID     uint    `json:"genre_id"`
+	ReleaseDate string  `json:"release_date"`
+}
+
+type MovieSummary struct {
+	ID     uint    `json:"id"`
+	Name   string  `json:"name"`
+	Price  float64 `json:"price"`
+	TypeID uint    `json:"-"`
 }
 
 type MovieResponse struct {
@@ -43,5 +49,14 @@ func NewMovieResponse(movie Movie, movieType Type, movieGenre Genre) *MovieRespo
 		Type:        *NewTypeResponse(movieType),
 		Genre:       *NewGenreResponse(movieGenre),
 		ReleaseDate: movie.ReleaseDate,
+	}
+}
+
+func NewMovieSummary(movie Movie) *MovieSummary {
+	return &MovieSummary{
+		ID:     movie.ID,
+		Name:   movie.Name,
+		Price:  movie.Price,
+		TypeID: movie.TypeID,
 	}
 }
