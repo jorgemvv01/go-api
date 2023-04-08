@@ -6,7 +6,8 @@ import (
 
 type Rent struct {
 	gorm.Model
-	UserID    uint    `json:"user_id" binding:"required" gorm:"foreignKey:GenreID"`
+	UserID    uint    `json:"user_id" binding:"required"`
+	User      User    `gorm:"foreignKey:UserID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" binding:"-"`
 	Total     float64 `json:"total" binding:"required" gorm:"not null"`
 	StartDate string  `json:"start_date" binding:"required" gorm:"not null"`
 	EndDate   string  `json:"end_date" binding:"required" gorm:"not null"`
