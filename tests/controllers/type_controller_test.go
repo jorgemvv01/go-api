@@ -81,7 +81,9 @@ func TestGetTypeByID(t *testing.T) {
 	}
 
 	var responseBody models.Response
-	json.Unmarshal(rr.Body.Bytes(), &responseBody)
+	if err = json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Error(err)
+	}
 	if responseBody.Data == nil {
 		t.Error(responseBody.Message)
 	}
@@ -132,7 +134,9 @@ func TestGetAllTypes(t *testing.T) {
 	}
 
 	var responseBody models.Response
-	json.Unmarshal(rr.Body.Bytes(), &responseBody)
+	if err = json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Error(err)
+	}
 	if responseBody.Data == nil {
 		t.Error(responseBody.Message)
 	}
@@ -181,7 +185,9 @@ func TestUpdateType(t *testing.T) {
 	}
 
 	var responseBody models.Response
-	json.Unmarshal(rr.Body.Bytes(), &responseBody)
+	if err = json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Error(err)
+	}
 	if responseBody.Data == nil {
 		t.Error(responseBody.Message)
 	}
@@ -229,7 +235,9 @@ func TestDeleteType(t *testing.T) {
 	}
 
 	var responseBody models.Response
-	json.Unmarshal(rr.Body.Bytes(), &responseBody)
+	if err = json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Error(err)
+	}
 	if responseBody.Message != "Type deleted successfully" {
 		t.Error("Movie type could not be deleted successfully")
 	}
