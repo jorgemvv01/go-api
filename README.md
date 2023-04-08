@@ -4,6 +4,7 @@ A simple Go-REST-API to manage movie rentals.
 This REST API was created with Go using the Gin framework, the GORM ORM and PostgreSQL for relational database management.
 
 ## Entity relationship
+![Entity relationship](https://raw.githubusercontent.com/jorgemvv01/go-api/master/entity_relationship.jpg)
 
 ## Rental price based on type of movies
 ```

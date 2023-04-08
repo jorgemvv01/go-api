@@ -81,7 +81,9 @@ func TestGetUserByID(t *testing.T) {
 	}
 
 	var responseBody models.Response
-	json.Unmarshal(rr.Body.Bytes(), &responseBody)
+	if err = json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Error(err)
+	}
 	if responseBody.Data == nil {
 		t.Error(responseBody.Message)
 	}
@@ -137,7 +139,9 @@ func TestGetAllUser(t *testing.T) {
 	}
 
 	var responseBody models.Response
-	json.Unmarshal(rr.Body.Bytes(), &responseBody)
+	if err = json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Error(err)
+	}
 	if responseBody.Data == nil {
 		t.Error(responseBody.Message)
 	}
@@ -186,7 +190,9 @@ func TestUpdateUsers(t *testing.T) {
 	}
 
 	var responseBody models.Response
-	json.Unmarshal(rr.Body.Bytes(), &responseBody)
+	if err = json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Error(err)
+	}
 	if responseBody.Data == nil {
 		t.Error(responseBody.Message)
 	}
@@ -239,7 +245,9 @@ func TestDeleteUser(t *testing.T) {
 	}
 
 	var responseBody models.Response
-	json.Unmarshal(rr.Body.Bytes(), &responseBody)
+	if err = json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Error(err)
+	}
 	if responseBody.Message != "User deleted successfully" {
 		t.Error("User could not be deleted successfully")
 	}

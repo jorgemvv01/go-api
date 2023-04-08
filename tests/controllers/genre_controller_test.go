@@ -81,7 +81,9 @@ func TestGetGenreByID(t *testing.T) {
 	}
 
 	var responseBody models.Response
-	json.Unmarshal(rr.Body.Bytes(), &responseBody)
+	if err = json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Error(err)
+	}
 	if responseBody.Data == nil {
 		t.Error(responseBody.Message)
 	}
@@ -132,7 +134,9 @@ func TestGetAllGenres(t *testing.T) {
 	}
 
 	var responseBody models.Response
-	json.Unmarshal(rr.Body.Bytes(), &responseBody)
+	if err = json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Error(err)
+	}
 	if responseBody.Data == nil {
 		t.Error(responseBody.Message)
 	}
@@ -181,7 +185,9 @@ func TestUpdateGenre(t *testing.T) {
 	}
 
 	var responseBody models.Response
-	json.Unmarshal(rr.Body.Bytes(), &responseBody)
+	if err = json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Error(err)
+	}
 	if responseBody.Data == nil {
 		t.Error(responseBody.Message)
 	}
@@ -229,7 +235,9 @@ func TestDeleteGenre(t *testing.T) {
 	}
 
 	var responseBody models.Response
-	json.Unmarshal(rr.Body.Bytes(), &responseBody)
+	if err = json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Error(err)
+	}
 	if responseBody.Message != "Genre deleted successfully" {
 		t.Error("Movie genre could not be deleted successfully")
 	}

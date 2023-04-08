@@ -57,7 +57,9 @@ func TestCreateMovie(t *testing.T) {
 	}
 
 	var responseBody models.Response
-	json.Unmarshal(rr.Body.Bytes(), &responseBody)
+	if err = json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Error(err)
+	}
 	if responseBody.Data == nil {
 		t.Error(responseBody.Message)
 	}
@@ -122,7 +124,9 @@ func TestGetMovieByID(t *testing.T) {
 	}
 
 	var responseBody models.Response
-	json.Unmarshal(rr.Body.Bytes(), &responseBody)
+	if err = json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Error(err)
+	}
 	if responseBody.Data == nil {
 		t.Error(responseBody.Message)
 	}
@@ -201,7 +205,9 @@ func TestGetAllMovies(t *testing.T) {
 	}
 
 	var responseBody models.Response
-	json.Unmarshal(rr.Body.Bytes(), &responseBody)
+	if err = json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Error(err)
+	}
 	if responseBody.Data == nil {
 		t.Error(responseBody.Message)
 	}
@@ -273,7 +279,9 @@ func TestUpdateMovie(t *testing.T) {
 	}
 
 	var responseBody models.Response
-	json.Unmarshal(rr.Body.Bytes(), &responseBody)
+	if err = json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Error(err)
+	}
 	if responseBody.Data == nil {
 		t.Error(responseBody.Message)
 	}
@@ -341,7 +349,9 @@ func TestDeleteMovie(t *testing.T) {
 	}
 
 	var responseBody models.Response
-	json.Unmarshal(rr.Body.Bytes(), &responseBody)
+	if err = json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Error(err)
+	}
 	if responseBody.Message != "Movie deleted successfully" {
 		t.Error("Movie could not be deleted successfully")
 	}
