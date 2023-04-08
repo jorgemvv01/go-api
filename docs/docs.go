@@ -9,7 +9,11 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "contact": {
+            "name": "Jorge Mario Villarreal V.",
+            "url": "https://www.linkedin.com/in/jorgemariovillarreal/",
+            "email": "jorgemvv01@gmail.com"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -453,6 +457,49 @@ const docTemplate = `{
                 }
             }
         },
+        "/rent/create": {
+            "post": {
+                "description": "Create a new rent.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Rent"
+                ],
+                "summary": "Create rent",
+                "parameters": [
+                    {
+                        "description": "Create rent",
+                        "name": "tags",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.RentRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/types/": {
             "get": {
                 "description": "Get all Types",
@@ -784,6 +831,26 @@ const docTemplate = `{
                 }
             }
         },
+        "models.RentRequest": {
+            "type": "object",
+            "properties": {
+                "end_date": {
+                    "type": "string"
+                },
+                "movie_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "start_date": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "models.Response": {
             "type": "object",
             "properties": {
@@ -816,8 +883,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "/api",
 	Schemes:          []string{},
-	Title:            "VideoClub Go - REST API",
-	Description:      "A simple API to manage movie rentals \\n GitHub Repository: https://github.com/jorgemvv01/go-api",
+	Title:            "VideoClub / Go-REST-API",
+	Description:      "A simple Go-REST-API to manage movie rentals \\n GitHub Repository: https://github.com/jorgemvv01/go-api",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

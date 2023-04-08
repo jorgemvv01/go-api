@@ -8,9 +8,13 @@ import (
 	"log"
 )
 
-// @title VideoClub Go - REST API
+// @title VideoClub / Go-REST-API
 // @version 1.0
-// @description A simple API to manage movie rentals \n GitHub Repository: https://github.com/jorgemvv01/go-api
+// @description A simple Go-REST-API to manage movie rentals \n GitHub Repository: https://github.com/jorgemvv01/go-api
+
+// @contact.name   Jorge Mario Villarreal V.
+// @contact.url    https://www.linkedin.com/in/jorgemariovillarreal/
+// @contact.email  jorgemvv01@gmail.com
 
 // @BasePath /api
 func main() {
@@ -22,7 +26,7 @@ func main() {
 		&models.Type{},
 		&models.Genre{},
 		&models.Movie{},
-		&models.RentMovie{},
+		&models.MovieRent{},
 	)
 
 	r := routes.SetupRoutes()
