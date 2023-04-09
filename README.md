@@ -91,8 +91,8 @@ your_host/api/docs/index.html
 * `/genres/delete/{ID}` - `DELETE`: Delete genre
 
 #### Movie Type
-* `/genres` - `GET`: Get all types
-* `/genres/{ID}` - `GET`: Get type by ID
+* `/types` - `GET`: Get all types
+* `/types/{ID}` - `GET`: Get type by ID
 
 #### Movies
 * `/movies` - `GET`: Get all movies
